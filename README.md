@@ -1,8 +1,16 @@
-# React + Vite
+# Aircall app submission
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a submission by me for an offical task required to be completed.
 
-Currently, two official plugins are available:
+App has been scafolded with:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Vite](https://vitejs.dev/)
+- UI made with [shadcn](https://ui.shadcn.com/) and [TailwindCSS](https://tailwindcss.com/)
+- Compatible with Node 16 & above
+- All requirements met
+
+Deployed with [Vercel](https://vercel.com)
+
+Here's the link to [app](https://0602c8a5.vercel.app/)
+
+Thanks for giving this opportunity, it was really fun to build this small app.
