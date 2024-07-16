@@ -14,6 +14,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { ArchiveIcon } from "lucide-react";
+import { BASE_URL, formatDate, extractTime, convertTime } from "../lib/helpers";
+import { useToast } from "@/components/ui/use-toast";
 
 const ArchivedCalls = () => {
   const [activities, setActivities] = useState([]);
@@ -21,6 +23,7 @@ const ArchivedCalls = () => {
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const {toast} = useToast();
 
   useEffect(() => {
     fetchActivities();
@@ -28,9 +31,7 @@ const ArchivedCalls = () => {
 
   const fetchActivities = async () => {
     try {
-      const response = await axios.get(
-        "https://aircall-backend.onrender.com/activities"
-      );
+      const response = await axios.get(BASE_URL);
       setActivities(response.data);
     } catch (err) {
       setError(err.message);
@@ -52,24 +53,12 @@ const ArchivedCalls = () => {
       </div>
     );
 
+  //navigate to call details
   const handleClick = (id) => {
     navigate(`/call-details/${id}`);
   };
 
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const extractTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
+  //sort & format dates
   const sortAndFormatDates = (activities) => {
     return activities
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -97,42 +86,57 @@ const ArchivedCalls = () => {
     grp.filter((activity) => activity.is_archived)
   );
 
+  //PATCH to update a call
   const updateCall = async (call) => {
     try {
-      await axios.patch(`https://aircall-backend.onrender.com/activities/${call.id}`, {
+      await axios.patch(BASE_URL + call.id, {
         ...call,
-        is_archived: false
+        is_archived: false,
       });
     } catch (error) {
-      console.error('Error updating call:', error);
+      console.error("Error updating call:", error);
     }
   };
 
-
+  //Promise.all to update ALL
   const updateAllCalls = async () => {
     try {
-      await Promise.all(activities.map(call => updateCall(call)));
+      await Promise.all(activities.map((call) => updateCall(call)));
       fetchActivities();
-      
+      toast({
+        title: "Calls updated",
+      })
     } catch (error) {
-      console.error('Error updating all calls:', error);
-      alert('Failed to update all calls');
+      console.error("Error updating all calls:", error);
+      alert("Failed to update all calls");
     } finally {
       setUpdating(false);
     }
   };
 
-  if (updating) return <div className="flex flex-grow items-center justify-center">Updating...</div>;
-
+  if (updating)
+    return (
+      <div className="flex flex-grow items-center justify-center">
+        Updating...
+      </div>
+    );
 
   return (
     <>
       <main className="p-4 h-96 flex-grow overflow-y-auto">
-        {myActivities.length > 0 && (
-          <Button variant="default" className="w-full mb-4" onClick={()=>updateAllCalls()}>
+        {myActivities.length > 0 ? (
+          <Button
+            variant="default"
+            className="w-full mb-4"
+            onClick={() => updateAllCalls()}
+          >
             <ArchiveRestore className="w-5 h-5 mr-2" />
             Restore all calls
           </Button>
+        ) : (
+          <div className="flex flex-grow justify-center items-center ">
+            No data yet...
+          </div>
         )}
         {myActivities.map((activity, index) => (
           <div key={index}>

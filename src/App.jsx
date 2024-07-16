@@ -27,15 +27,7 @@ function App() {
           <Footer />
         </Router>
       </div>
-      <p className="text-sm text-white flex justify-center items-center">
-        Made with love by &nbsp;
-        <a
-          href="https://yash-thaker.vercel.app"
-          className="font-bold underline"
-        >
-          Yash
-        </a>
-      </p>
+      
     </>
   );
 }

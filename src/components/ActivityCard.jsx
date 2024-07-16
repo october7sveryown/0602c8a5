@@ -5,24 +5,12 @@ import ActivityDetails from "./ActivityDetails";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { MoveDownLeft, MoveUpRight, PhoneIcon, PhoneMissed } from "lucide-react";
+import { BASE_URL,formatDate, extractTime,convertTime } from "../lib/helpers";
 
 const ActivityCard = ({ activities }) => {
   const navigate = useNavigate();
 
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const extractTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
+  //sort and format dates
   const sortAndFormatDates = (activities) => {
     return activities
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -33,6 +21,7 @@ const ActivityCard = ({ activities }) => {
       }));
   };
 
+  //navigate to call details
   const handleClick = (id) => {
     navigate(`/call-details/${id}`);
   };
@@ -48,7 +37,6 @@ const ActivityCard = ({ activities }) => {
     return acc;
   }, {});
 
-  // Convert grouped activities back to an array
   activities = Object.values(groupedActivities);
 
   activities = sortAndFormatDates(activities);

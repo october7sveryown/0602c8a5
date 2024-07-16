@@ -23,17 +23,22 @@ const Header = () => {
           <PhoneCallIcon className="w-6 h-6 text-green-500" />
           <h1 className="ml-2 text-lg font-bold">Aircall</h1>
         </div>
+        <div className="flex items-center">
+            {
+                (location.pathname == '/') ? <p className='text-green-500 font-semibold text-md'>Activity Feed</p> : ""
+            }
+        </div>
         <div className="flex items-center space-x-4">
           {
             (location.pathname != '/') && (
-                <Button variant="ghost" className="text-muted-foreground" onClick={()=>goToHome()}>
+                <Button variant="ghost" className="text-muted-foreground hover:underline" onClick={()=>goToHome()}>
                     Calls
           </Button>
             )
           }
           {
             (location.pathname != '/archived-calls') && (
-                <Button variant="ghost" className="text-muted-foreground" onClick={()=>handleClick()}>
+                <Button variant="ghost" className="text-muted-foreground hover:underline" onClick={()=>handleClick()}>
             Archived calls
           </Button>
             )

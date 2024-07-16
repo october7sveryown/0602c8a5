@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast"
+import { BASE_URL,formatDate, extractTime,convertTime } from "../lib/helpers";
 
 
 const ActivityDetails = (trigger) => {
@@ -30,7 +31,7 @@ const ActivityDetails = (trigger) => {
   const fetchActivities = async () => {
     try {
       const response = await axios.get(
-        "https://aircall-backend.onrender.com/activities/" + id.id
+        BASE_URL + id.id
       );
       setDetails(response.data);
     } catch (err) {
@@ -53,10 +54,11 @@ const ActivityDetails = (trigger) => {
       </div>
     );
 
+    //Update a call
     const updateCall = async (call) => {
         try {
             const response = await axios.patch(
-              "https://aircall-backend.onrender.com/activities/" + id.id,
+              BASE_URL + id.id,
               {
                 is_archived : !call.is_archived
               }
@@ -71,30 +73,6 @@ const ActivityDetails = (trigger) => {
             setLoading(false);
           }
         };
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  
-
-  const extractTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
-  const convertTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes} minute${
-      minutes !== 1 ? "s" : ""
-    } and ${remainingSeconds} second${remainingSeconds !== 1 ? "s" : ""}`;
-  };
 
   return (
     <>
